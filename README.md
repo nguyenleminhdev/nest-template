@@ -48,9 +48,27 @@ $ pnpm run g <API-NAME>
 - Lệnh rút gọn để tạo mới API có sẵn input validate.
 - API nhận tất cả các method (sử dụng build-in decorator @all).
 - Tạo sẵn res.ok và res.err.
+- Global prefix cho toàn bộ controller (host/v1/path).
+- Các giá trị của env sẽ động tuỳ theo NODE_ENV.
 
 ## Incomming features
-- Các giá trị của constant sẽ khác biệt từng env (VD: PORT).
+- test case cho app
+- controller động không cần import
+- các const dùng chung
+- color log
+- Serve static at /public/*
+- Service indexes MongoDB
+- Service hash salt password
+- No frontend
+- Use MongoDb database
+- Automatic routing
+- Automatic logging request
+- Automatic reload server when code change
+- Modify res.ok() and res.err()
+- Disable socket
+- Import global lodash
+- Import global async.js
+- Set cors allow all origin
 
 ## Stay in touch
 
