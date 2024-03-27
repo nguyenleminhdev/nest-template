@@ -2,12 +2,17 @@ import { NestFactory } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
+import { Logger } from './core/logger'
+
 import { AppModule } from './app.module'
 
 /**khởi động server */
 async function bootstrap() {
   /**đối tượng đại diện cho server */
-  const NEST = await NestFactory.create(AppModule)
+  const NEST = await NestFactory.create(AppModule, {
+    // cấu hình nest sử dụng logger custom
+    logger: new Logger(),
+  })
 
   // cài đặt validate toàn bộ request
   NEST.useGlobalPipes(new ValidationPipe())

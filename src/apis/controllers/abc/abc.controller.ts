@@ -2,10 +2,14 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AbcService } from './abc.service';
 import { CreateAbcDto } from './dto/create-abc.dto';
 import { UpdateAbcDto } from './dto/update-abc.dto';
+import { Logger } from 'src/core/logger';
 
 @Controller('abc')
 export class AbcController {
-  constructor(private readonly abcService: AbcService) {}
+  constructor(
+    private readonly abcService: AbcService,
+    private readonly log: Logger,
+  ) { }
 
   @Post()
   create(@Body() createAbcDto: CreateAbcDto) {
@@ -14,6 +18,9 @@ export class AbcController {
 
   @Get()
   findAll() {
+
+    this.log.log('alo alo alo')
+
     return this.abcService.findAll();
   }
 
