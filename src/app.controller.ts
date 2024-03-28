@@ -9,7 +9,6 @@ import { Logger } from './core/logger'
 
 // services
 import { AppService } from './app.service'
-import { hey, xxx } from './apis/services/crypto'
 
 @Controller()
 export class AppController {
@@ -23,23 +22,7 @@ export class AppController {
   }
 
   @All()
-  sayGreeting(@Res() res: ResType) {
-
-    hey().then((data) => {
-      this.log.log('data', data)
-
-      console.log(
-        xxx(
-          data.iv,
-          data.key,
-          data.encryptedText)
-      )
-
-    }
-    ).catch((err) => {
-      this.log.error('err', err)
-    })
-
+  async sayGreeting(@Res() res: ResType) {
     res.ok(this.appService.sayGreeting())
   }
 }

@@ -58,6 +58,8 @@ $ pnpm run g <API-NAME>
 - Set cors allow all origin
 
 ## Incomming features
+- khi sv sập thì trả về 500 thay vì đứt ngang
+- api 404
 - i18n
 - e2e test case cho api
 - controller động không cần import

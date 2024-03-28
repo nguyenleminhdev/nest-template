@@ -9,10 +9,16 @@ import { AppModule } from './app.module'
 
 /**khởi động server */
 async function bootstrap() {
+  // xóa màn hình console
+  console.clear()
+
+  /**đối tượng logger */
+  const LOGGER = new Logger()
+
   /**đối tượng đại diện cho server */
   const NEST = await NestFactory.create(AppModule, {
     // cấu hình nest sử dụng logger custom
-    logger: new Logger(),
+    logger: LOGGER,
   })
 
   // cài đặt validate toàn bộ request
@@ -39,5 +45,8 @@ async function bootstrap() {
 
   // lắng nghe api
   await NEST.listen(configService.get('NEST_POST') || 1337)
+
+  // thông báo server đã khởi động
+  LOGGER.log(`Server is running on: ${await NEST.getUrl()}`, '🚀 ')
 }
 bootstrap()

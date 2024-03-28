@@ -1,46 +1,90 @@
 import { createCipheriv, randomBytes, scrypt, createDecipheriv } from 'crypto'
 import { promisify } from 'util'
+import { hash, compare } from 'bcrypt'
 
-export async function ENCRYPT_TEXT(input: string, password: string = '123456') {
-    /**tạo ra vector khởi tạo ngẫu nhiên */
-    const IV = randomBytes(16)
+import type { ResultAwait } from 'src/interfaces/function'
 
-    // console.log(iv.toString('hex'))
+/**mã hoá dữ liệu đối xứng */
+export async function ENCRYPT_TEXT(
+    input: string,
+    password: string = '123456'
+): Promise<ResultAwait> {
+    try {
+        /**tạo ra vector khởi tạo ngẫu nhiên */
+        const IV = randomBytes(16)
+        /**rạo ra key random từ mật khẩu */
+        const KEY = await promisify(scrypt)(password, 'salt', 32) as Buffer
 
-    // The key length is dependent on the algorithm.
-    // In this case for aes256, it is 32 bytes.
-    const key = (await promisify(scrypt)(password, 'salt', 32)) as Buffer;
-    const cipher = createCipheriv('aes-256-ctr', key, IV);
+        /**đối tượng mã hoá */
+        const CIPHER = createCipheriv('aes-256-ctr', KEY, IV)
 
+        /**dữ liệu được mã hoá dữ liệu */
+        const ENCRYPTED_TEXT = Buffer.concat([
+            CIPHER.update(input),
+            CIPHER.final()
+        ])
 
-    const encryptedText = Buffer.concat([
-        cipher.update(input),
-        cipher.final(),
-    ])
+        /**kết quả trả về chuyển thành string hex */
+        const RESULT = {
+            key: KEY.toString('hex'),
+            iv: IV.toString('hex'),
+            encrypted_text: ENCRYPTED_TEXT.toString('hex')
+        }
 
-    return {
-        key,
-        IV,
-        password,
-        encryptedText
-    };
+        return { r: RESULT }
+    } catch (e) { return { e } }
 }
 
+/**giải mã dữ liệu đối xứng */
+export function DECRIPT_TEXT(
+    key: string,
+    iv: string,
+    encryptedText: string
+): ResultAwait {
+    try {
+        /**chuyển iv từ hex về buffer */
+        const IV = Buffer.from(iv, 'hex')
+        /**chuyển key từ hex về buffer */
+        const KEY = Buffer.from(key, 'hex')
+        /**chuyển encryptedText từ hex về buffer */
+        const ENCRYPTED_TEXT = Buffer.from(encryptedText, 'hex')
 
-export function xxx(
-    iv: Buffer,
-    key: Buffer,
-    encryptedText: Buffer) {
+        /**đối tượng giải mã */
+        const DE_CIPHER = createDecipheriv('aes-256-ctr', KEY, IV)
 
+        /**dữ liệu được giải mã */
+        const DECRYPTED_TEXT = Buffer.concat([
+            DE_CIPHER.update(ENCRYPTED_TEXT),
+            DE_CIPHER.final(),
+        ])
 
-    const decipher = createDecipheriv('aes-256-ctr', key, iv);
-    // const decipher = createDecipheriv('aes-256-ctr', key, null);
-    const decryptedText = Buffer.concat([
-        decipher.update(encryptedText),
-        decipher.final(),
-    ]);
-
-    return decryptedText.toString()
-
+        // kết quả trả về chuyển thành string
+        return { r: DECRYPTED_TEXT.toString() }
+    } catch (e) { return { e } }
 }
 
+/**băm dữ liệu */
+export async function HASH(
+    input: string,
+    round: number = 6
+): Promise<ResultAwait> {
+    try {
+        /**mã hoá dữ liệu */
+        const HASH = await hash(input, round)
+
+        return { r: HASH }
+    } catch (e) { return { e } }
+}
+
+/**so sánh chuỗi gốc và mã băm */
+export async function COMPARE(
+    input: string,
+    hash: string
+): Promise<ResultAwait> {
+    try {
+        /**so sánh chuỗi gốc và mã băm */
+        const IS_MATCH = await compare(input, hash)
+
+        return { r: IS_MATCH }
+    } catch (e) { return { e } }
+}
