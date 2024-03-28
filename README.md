@@ -53,26 +53,18 @@ $ pnpm run g <API-NAME>
 - Các giá trị constant dùng chung cho toàn bộ env.
 - unit test case cho service.
 - color log
+- Serve static at /public/*
+- Automatic logging request
+- Set cors allow all origin
 
 ## Incomming features
 - i18n
 - e2e test case cho api
 - controller động không cần import
-- Serve static at /public/*
-- Service indexes MongoDB
 - mongo, postgre
 - munti db connect
 - Service hash salt password
-- No frontend
-- Use MongoDb database
 - Automatic routing
-- Automatic logging request
-- Automatic reload server when code change
-- Modify res.ok() and res.err()
-- Disable socket
-- Import global lodash
-- Import global async.js
-- Set cors allow all origin
 - ghi log vào ES
 
 ## Stay in touch

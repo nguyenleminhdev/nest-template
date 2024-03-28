@@ -9,6 +9,7 @@ import { Logger } from './core/logger'
 
 // services
 import { AppService } from './app.service'
+import { hey, xxx } from './apis/services/crypto'
 
 @Controller()
 export class AppController {
@@ -16,7 +17,7 @@ export class AppController {
     private readonly appService: AppService,
     private readonly configService: ConfigService,
     private readonly log: Logger,
-  ) { 
+  ) {
     // đặt nhãn cho logger
     log.setContext('AppController')
   }
@@ -24,18 +25,20 @@ export class AppController {
   @All()
   sayGreeting(@Res() res: ResType) {
 
-    this.log.log('log')
-    this.log.error('error')
-    this.log.warn('warn')
-    this.log.debug('debug')
-    this.log.verbose('verbose')
-    this.log.fatal('fatal')
+    hey().then((data) => {
+      this.log.log('data', data)
 
-    console.log(
-      'hey:',
-      this.configService.get('test'),
-      this.configService.get('NEST_POST')
-    )
+      console.log(
+        xxx(
+          data.iv,
+          data.key,
+          data.encryptedText)
+      )
+
+    }
+    ).catch((err) => {
+      this.log.error('err', err)
+    })
 
     res.ok(this.appService.sayGreeting())
   }
