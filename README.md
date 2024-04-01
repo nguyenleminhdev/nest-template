@@ -56,17 +56,16 @@ $ pnpm run g <API-NAME>
 - Serve static at /public/*
 - Automatic logging request
 - Set cors allow all origin
-
-## Incomming features
 - khi sv sập thì trả về 500 thay vì đứt ngang
 - api 404
+- Service hash salt password
+
+## Incomming features
 - i18n
 - e2e test case cho api
 - controller động không cần import
 - mongo, postgre
 - munti db connect
-- Service hash salt password
-- Automatic routing
 - ghi log vào ES
 
 ## Stay in touch

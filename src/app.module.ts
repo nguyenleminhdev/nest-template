@@ -33,7 +33,12 @@ import { XxxModule } from './apis/controllers/xxx/xxx.module'
     }),
 
     // cấu hình serve static
-    ServeStaticModule.forRoot({ rootPath: `${process.cwd()}/public` }),
+    ServeStaticModule.forRoot({ 
+      // nơi chứa file static
+      rootPath: `${process.cwd()}/public`, 
+      // file static được phục vụ ở path nào, tất cả các path không khớp sẽ bị 404
+      serveRoot: '/static/' 
+    }),
 
     // cho phép logger có thể sử dụng ở mọi nơi
     LoggerModule,

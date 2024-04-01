@@ -29,7 +29,7 @@ export class httpLogging implements NestMiddleware {
     /**có cho phép log không */
     const IS_LOG = this.configService.get('NEST_HTTP_LOGGING') === 'true'
 
-    // nếu cho phép log
+    // nếu cho phép log request
     if (IS_LOG) this.log.debug(`${req.method} ${req.url}`)
 
     next()

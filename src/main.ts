@@ -1,9 +1,11 @@
-import { NestFactory } from '@nestjs/core'
+import { readFileSync } from 'fs'
+import { NestFactory, HttpAdapterHost } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
 import { Logger } from './core/logger'
 import { httpLogging } from './core/httpLogging'
+import { CatchError } from './core/catchError'
 
 import { AppModule } from './app.module'
 
@@ -20,6 +22,9 @@ async function bootstrap() {
     // cấu hình nest sử dụng logger custom
     logger: LOGGER,
   })
+
+  // sửa lại thông báo bắt lỗi 500
+  NEST.useGlobalFilters(new CatchError(NEST.get(HttpAdapterHost)))
 
   // cài đặt validate toàn bộ request
   NEST.useGlobalPipes(new ValidationPipe())
@@ -45,6 +50,9 @@ async function bootstrap() {
 
   // lắng nghe api
   await NEST.listen(configService.get('NEST_POST') || 1337)
+
+  // hiển thị hình ảnh phật tổ
+  LOGGER.log(await readFileSync(`${process.cwd()}/buddha.txt`, 'utf-8'))
 
   // thông báo server đã khởi động
   LOGGER.log(`Server is running on: ${await NEST.getUrl()}`, '🚀 ')
