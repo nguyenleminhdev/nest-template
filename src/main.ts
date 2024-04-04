@@ -1,13 +1,14 @@
-import { readFileSync } from 'fs'
 import { NestFactory, HttpAdapterHost } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+
+import { readFileSync } from 'fs'
 
 import { Logger } from './core/logger'
 import { httpLogging } from './core/httpLogging'
 import { CatchError } from './core/catchError'
 
-import { AppModule } from './app.module'
+import ApiModule from './app.module'
 
 /**khởi động server */
 async function bootstrap() {
@@ -18,7 +19,7 @@ async function bootstrap() {
   const LOGGER = new Logger()
 
   /**đối tượng đại diện cho server */
-  const NEST = await NestFactory.create(AppModule, {
+  const NEST = await NestFactory.create(ApiModule, {
     // cấu hình nest sử dụng logger custom
     logger: LOGGER,
   })

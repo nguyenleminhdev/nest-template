@@ -1,19 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { AppService } from './app.service'
+import { Service } from '../src/app.module'
 
 describe('AbcService', () => {
-  let service: AppService
+  let service: Service
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AppService],
+      providers: [Service],
     }).compile()
 
-    service = module.get<AppService>(AppService)
+    service = module.get<Service>(Service)
   })
 
   it(
     'Kết quả phải là String',
-    () => expect(typeof service.sayGreeting()).toBe('string')
+    () => expect(typeof service.pong()).toBe('string')
   )
 })

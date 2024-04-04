@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common'
+import {
+  MiddlewareConsumer, Module, NestModule, Controller, All, Injectable
+} from '@nestjs/common'
+
+// cấu hình serve static
+import { ServeStaticModule } from '@nestjs/serve-static'
 
 // cấu hình các biến môi trường
 import { ConfigModule } from '@nestjs/config'
@@ -7,16 +12,32 @@ import constants from './configs/constants'
 // cấu hình logger
 import { LoggerModule } from './core/logger'
 
-// cấu hình serve static
-import { ServeStaticModule } from '@nestjs/serve-static'
+// các middleware
+import { isLogin } from './apis/middlewares/isLogin'
+import { isAdmin } from './apis/middlewares/isAdmin'
 
-// cấu hình gốc của ứng dụng
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
+// custom response
+import { Res, ResType } from './apis/decorators/res.decorator'
 
 // các api module
-import { AbcModule } from './apis/controllers/abc/abc.module'
-import { XxxModule } from './apis/controllers/xxx/xxx.module'
+import AbcModule from './apis/controllers/app.module'
+import XxxModule from './apis/controllers/public.module'
+
+@Injectable() export class Service {
+  /**gửi lời chào hệ thống */
+  pong() {
+    return 'Server loading successfully!'
+  }
+}
+
+@Controller() export class ApiController {
+  constructor(private readonly service: Service) { }
+
+  /**trả về thông báo khi gọi "/" */
+  @All() async all(@Res() res: ResType) {
+    res.ok(this.service.pong())
+  }
+}
 
 @Module({
   imports: [
@@ -33,11 +54,11 @@ import { XxxModule } from './apis/controllers/xxx/xxx.module'
     }),
 
     // cấu hình serve static
-    ServeStaticModule.forRoot({ 
+    ServeStaticModule.forRoot({
       // nơi chứa file static
-      rootPath: `${process.cwd()}/public`, 
+      rootPath: `${process.cwd()}/public`,
       // file static được phục vụ ở path nào, tất cả các path không khớp sẽ bị 404
-      serveRoot: '/static/' 
+      serveRoot: '/static/'
     }),
 
     // cho phép logger có thể sử dụng ở mọi nơi
@@ -47,8 +68,12 @@ import { XxxModule } from './apis/controllers/xxx/xxx.module'
     AbcModule,
     XxxModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
-})
-
-export class AppModule { }
+  controllers: [ApiController],
+  providers: [Service],
+}) export default class ApiModule implements NestModule {
+  /**cài đặt policy cho api */
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(isLogin, isAdmin).forRoutes('abc')
+    consumer.apply(isLogin).forRoutes('xxx')
+  }
+}

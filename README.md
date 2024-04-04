@@ -60,13 +60,20 @@ $ pnpm run g <API-NAME>
 - api 404
 - Service hash salt password
 
+- khai báo midleware
+- tinh giản khai báo controller api
+- khai báo nested controller api
+- tách riêng module test ra
+
 ## Incomming features
+- req all param
+- @ imporrt
 - i18n
-- e2e test case cho api
-- controller động không cần import
 - mongo, postgre
 - munti db connect
 - ghi log vào ES
+- e2e test case cho api
+- upload
 
 ## Stay in touch
 
