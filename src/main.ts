@@ -4,11 +4,11 @@ import { ConfigService } from '@nestjs/config'
 
 import { readFileSync } from 'fs'
 
-import { Logger } from './core/logger'
-import { httpLogging } from './core/httpLogging'
-import { CatchError } from './core/catchError'
+import { Logger } from '@/core/logger'
+import { httpLogging } from '@/core/httpLogging'
+import { CatchError } from '@/core/catchError'
 
-import ApiModule from './app.module'
+import ApiModule from '@/app.module'
 
 /**khởi động server */
 async function bootstrap() {

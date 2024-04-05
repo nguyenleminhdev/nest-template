@@ -2,7 +2,7 @@ import { createCipheriv, randomBytes, scrypt, createDecipheriv } from 'crypto'
 import { promisify } from 'util'
 import { hash, compare } from 'bcrypt'
 
-import type { ResultAwait } from 'src/interfaces/function'
+import type { ResultAwait } from '@/interfaces/function'
 
 /**mã hoá dữ liệu đối xứng */
 export async function ENCRYPT_TEXT(

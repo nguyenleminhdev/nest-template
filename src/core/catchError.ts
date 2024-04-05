@@ -3,7 +3,7 @@ import {
 } from '@nestjs/common'
 import { HttpAdapterHost } from '@nestjs/core'
 import { ConfigService } from '@nestjs/config'
-import { Logger } from './logger'
+import { Logger } from '@/core/logger'
 
 @Catch()
 /**bắt lỗi 404, 500 toàn hệ thống */

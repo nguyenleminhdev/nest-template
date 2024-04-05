@@ -5,28 +5,41 @@ import {
 // cấu hình serve static
 import { ServeStaticModule } from '@nestjs/serve-static'
 
+import { HeaderResolver, I18nModule } from 'nestjs-i18n'
+
 // cấu hình các biến môi trường
 import { ConfigModule } from '@nestjs/config'
-import constants from './configs/constants'
+import constants from '@/configs/constants'
 
 // cấu hình logger
-import { LoggerModule } from './core/logger'
+import { LoggerModule } from '@/core/logger'
 
 // các middleware
-import { isLogin } from './apis/middlewares/isLogin'
-import { isAdmin } from './apis/middlewares/isAdmin'
+import { isLogin } from '@/apis/middlewares/isLogin'
+import { isAdmin } from '@/apis/middlewares/isAdmin'
 
-// custom response
-import { Res, ResType } from './apis/decorators/res.decorator'
+// custom response request
+import { Req, ReqType } from '@/apis/decorators/req.decorator'
+import { Res, ResType } from '@/apis/decorators/res.decorator'
+
+// i18n context
+import { I18nService } from 'nestjs-i18n'
+import type { I18nTranslations } from '@/langs/interface'
+
+// cronjob
+import { ScheduleModule } from '@nestjs/schedule'
+import CronModule from '@/apis/schedules/cron.module'
 
 // các api module
-import AbcModule from './apis/controllers/app.module'
-import XxxModule from './apis/controllers/public.module'
+import AbcModule from '@/apis/controllers/app.module'
+import XxxModule from '@/apis/controllers/public.module'
 
 @Injectable() export class Service {
+  constructor(private readonly i18n: I18nService<I18nTranslations>) {}
+
   /**gửi lời chào hệ thống */
   pong() {
-    return 'Server loading successfully!'
+    return this.i18n.t('COMMON.PONG')
   }
 }
 
@@ -34,7 +47,12 @@ import XxxModule from './apis/controllers/public.module'
   constructor(private readonly service: Service) { }
 
   /**trả về thông báo khi gọi "/" */
-  @All() async all(@Res() res: ResType) {
+  @All() async all(
+    @Req() req: ReqType,
+    @Res() res: ResType
+  ) {
+    let p = req.allParams()
+
     res.ok(this.service.pong())
   }
 }
@@ -53,6 +71,22 @@ import XxxModule from './apis/controllers/public.module'
       cache: true,
     }),
 
+    // cấu hình i18n
+    I18nModule.forRoot({
+      // ngôn ngữ mặc định
+      fallbackLanguage: 'vn',
+      loaderOptions: {
+        path: 'src/langs/',
+        watch: true,
+      },
+      resolvers: [
+        // cấu hình header để xác định ngôn ngữ
+        new HeaderResolver(['locale'])
+      ],
+      // tạo interface cho các ngôn ngữ tự động
+      typesOutputPath: 'src/langs/interface.ts',
+    }),
+
     // cấu hình serve static
     ServeStaticModule.forRoot({
       // nơi chứa file static
@@ -64,6 +98,10 @@ import XxxModule from './apis/controllers/public.module'
     // cho phép logger có thể sử dụng ở mọi nơi
     LoggerModule,
 
+    // cấu hình cronjob
+    ScheduleModule.forRoot(), 
+    CronModule,
+
     // các module api
     AbcModule,
     XxxModule,
@@ -73,7 +111,7 @@ import XxxModule from './apis/controllers/public.module'
 }) export default class ApiModule implements NestModule {
   /**cài đặt policy cho api */
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(isLogin, isAdmin).forRoutes('abc')
-    consumer.apply(isLogin).forRoutes('xxx')
+    consumer.apply(isLogin, isAdmin).forRoutes('admin')
+    consumer.apply(isLogin).forRoutes('app')
   }
 }

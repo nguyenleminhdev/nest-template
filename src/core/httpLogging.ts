@@ -4,7 +4,7 @@
  */
 import { Injectable, NestMiddleware, Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Logger } from './logger'
+import { Logger } from '@/core/logger'
 
 import type { Request, Response } from 'express'
 

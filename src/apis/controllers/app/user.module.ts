@@ -1,5 +1,6 @@
 import { Module, Injectable, Controller, All } from '@nestjs/common'
-import { Res, ResType } from '../../decorators/res.decorator'
+import { Req, ReqType } from '@/apis/decorators/req.decorator'
+import { Res, ResType } from '@/apis/decorators/res.decorator'
 
 @Injectable() export class Service {
   pong() {
@@ -12,7 +13,9 @@ import { Res, ResType } from '../../decorators/res.decorator'
     private readonly service: Service,
   ) { }
 
-  @All() all(@Res() res: ResType) {
+  @All() all(@Req() req: ReqType, @Res() res: ResType) {
+    let p = req.allParams()
+    
     res.ok(this.service.pong())
   }
 }

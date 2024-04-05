@@ -59,21 +59,25 @@ $ pnpm run g <API-NAME>
 - khi sv sập thì trả về 500 thay vì đứt ngang
 - api 404
 - Service hash salt password
-
 - khai báo midleware
 - tinh giản khai báo controller api
 - khai báo nested controller api
 - tách riêng module test ra
+- import @/ thay cho src/
+- req allParams
+
+- i18n: https://nestjs-i18n.com
+- upload file: https://docs.nestjs.com/techniques/file-upload
+- rate limit: https://docs.nestjs.com/security/rate-limiting
+- cronjob: https://docs.nestjs.com/techniques/task-scheduling
 
 ## Incomming features
-- req all param
-- @ imporrt
-- i18n
+- queue
 - mongo, postgre
 - munti db connect
 - ghi log vào ES
-- e2e test case cho api
-- upload
+- e2e test + case cho api, core, ...
+- pm2
 
 ## Stay in touch
 

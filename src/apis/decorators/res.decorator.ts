@@ -13,7 +13,7 @@ export interface ResType {
   err: ResponseFn
 }
 
-/**Decorator tuỳ chỉnh ressponse */
+/**Decorator tuỳ chỉnh response */
 export const Res = createParamDecorator((
   data: unknown,
   ctx: ExecutionContext
