@@ -19,8 +19,7 @@ import { isLogin } from '@/apis/middlewares/isLogin'
 import { isAdmin } from '@/apis/middlewares/isAdmin'
 
 // custom response request
-import { Req, ReqType } from '@/apis/decorators/req.decorator'
-import { Res, ResType } from '@/apis/decorators/res.decorator'
+import { Ok, ResFn } from '@/apis/decorators/res.decorator'
 
 // i18n context
 import { I18nService } from 'nestjs-i18n'
@@ -35,7 +34,7 @@ import AbcModule from '@/apis/controllers/app.module'
 import XxxModule from '@/apis/controllers/public.module'
 
 @Injectable() export class Service {
-  constructor(private readonly i18n: I18nService<I18nTranslations>) {}
+  constructor(private readonly i18n: I18nService<I18nTranslations>) { }
 
   /**gửi lời chào hệ thống */
   pong() {
@@ -47,14 +46,7 @@ import XxxModule from '@/apis/controllers/public.module'
   constructor(private readonly service: Service) { }
 
   /**trả về thông báo khi gọi "/" */
-  @All() async all(
-    @Req() req: ReqType,
-    @Res() res: ResType
-  ) {
-    let p = req.allParams()
-
-    res.ok(this.service.pong())
-  }
+  @All() async all(@Ok() ok: ResFn) { ok(this.service.pong()) }
 }
 
 @Module({
@@ -99,7 +91,7 @@ import XxxModule from '@/apis/controllers/public.module'
     LoggerModule,
 
     // cấu hình cronjob
-    ScheduleModule.forRoot(), 
+    ScheduleModule.forRoot(),
     CronModule,
 
     // các module api

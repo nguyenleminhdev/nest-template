@@ -1,7 +1,7 @@
 import { Module, Injectable, Controller, All } from '@nestjs/common'
-import { Req, ReqType } from '@/apis/decorators/req.decorator'
-import { Res, ResType } from '@/apis/decorators/res.decorator'
+import { Ok, ResFn } from '@/apis/decorators/res.decorator'
 
+// nested api
 import UserModule from '@/apis/controllers/app/user.module'
 
 @Injectable() export class Service {
@@ -15,10 +15,8 @@ import UserModule from '@/apis/controllers/app/user.module'
     private readonly service: Service,
   ) { }
 
-  @All() all(@Req() req: ReqType, @Res() res: ResType) {
-    let p = req.allParams()
-    
-    res.ok(this.service.pong())
+  @All() index(@Ok() ok: ResFn) {    
+    ok(this.service.pong())
   }
 }
 

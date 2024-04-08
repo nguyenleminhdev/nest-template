@@ -2,7 +2,10 @@
 declare namespace Express {
     /**thêm thuộc tính cho req để chuyển dữ liệu giữa các middleware */
     export interface Request {
-        /**hoặc kiểu dữ liệu phù hợp với nhu cầu của bạn */
-        customData: string; 
+        /**fix lỗi i18n trong req không tồn tại */
+        i18nService: import('nestjs-i18n').I18nService
+
+        /**thêm dữ liệu custom */
+        customData: string;
     }
 }

@@ -16,8 +16,7 @@ import { ConfigService } from '@nestjs/config'
 
     @Cron('* * * * * *', {
         timeZone: 'Asia/Ho_Chi_Minh',
-        disabled: this
-        // disabled: false
+        disabled: true
     }) test() {
         console.log('mỗi 1s', this.configService.get('NEST_TIMEZONE'))
     }

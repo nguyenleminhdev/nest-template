@@ -47,7 +47,6 @@ $ pnpm run g <API-NAME>
 - Server dev tự động theo dõi sự thay đổi của code và restart (sử dụng swc để x20 lần tốc độ build).
 - Lệnh rút gọn để tạo mới API có sẵn input validate.
 - API nhận tất cả các method (sử dụng build-in decorator @all).
-- Tạo sẵn res.ok và res.err.
 - Global prefix cho toàn bộ controller (host/v1/path).
 - Các giá trị của env sẽ động tuỳ theo NODE_ENV.
 - Các giá trị constant dùng chung cho toàn bộ env.
@@ -64,20 +63,24 @@ $ pnpm run g <API-NAME>
 - khai báo nested controller api
 - tách riêng module test ra
 - import @/ thay cho src/
-- req allParams
-
+- Tạo sẵn res.ok và res.err.
 - i18n: https://nestjs-i18n.com
 - upload file: https://docs.nestjs.com/techniques/file-upload
 - rate limit: https://docs.nestjs.com/security/rate-limiting
+
+- req allParams và nhận dto validator
 - cronjob: https://docs.nestjs.com/techniques/task-scheduling
 
 ## Incomming features
+- xử lý cat lỗi dto
+- xử lý các lỗi i18n
 - queue
 - mongo, postgre
 - munti db connect
 - ghi log vào ES
 - e2e test + case cho api, core, ...
 - pm2
+- mã gốc của i18n trong res
 
 ## Stay in touch
 

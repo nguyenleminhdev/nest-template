@@ -1,14 +1,24 @@
 import {
-    Module, Controller, Injectable, All, UseInterceptors, UploadedFile, Req as RawReq, UseGuards
+    Module, Controller, Injectable, All, UseInterceptors, UploadedFile, UseGuards
 } from '@nestjs/common'
 import { I18n, I18nContext } from 'nestjs-i18n'
-import { Req, ReqType } from '@/apis/decorators/req.decorator'
-import { Res, ResType } from '@/apis/decorators/res.decorator'
+import { AllParams } from '@/apis/decorators/req.decorator'
+import { Ok, Err, ResFn } from '@/apis/decorators/res.decorator'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler'
-import { Request } from 'express'
 
 import type { I18nTranslations } from '@/langs/interface'
+
+import { IsEmail, IsNotEmpty } from 'class-validator'
+
+/**dto validator test */
+class TestDto {
+    @IsEmail()
+    email: string;
+
+    @IsNotEmpty()
+    password: string;
+}
 
 @Injectable() export class Service {
     pong() {
@@ -16,23 +26,39 @@ import type { I18nTranslations } from '@/langs/interface'
     }
 }
 
-@Controller('public') 
+@Controller('public')
 export class ApiController {
     constructor(private readonly service: Service) { }
 
     @All()
     @UseGuards(ThrottlerGuard)
     @UseInterceptors(FileInterceptor('file'))
-    all(
+    index(
         @UploadedFile() file: Express.Multer.File,
-        @RawReq() raw_req: Request,
-        @Req() req: ReqType,
-        @Res() res: ResType,
+        @Ok() ok: ResFn,
         @I18n() i18n: I18nContext<I18nTranslations>
     ) {
-        let p = req.allParams()
+        console.log(
+            i18n.t('COMMON.PONG')
 
-        res.ok(this.service.pong())
+        )
+
+        ok(this.service.pong())
+    }
+
+    @All('test')
+    async test(
+        @AllParams() p: TestDto,
+        @Ok() ok: ResFn,
+        @Err() err: ResFn,
+        @I18n() i18n: I18nContext
+    ) {
+        // console.log('all :', p)
+
+        throw new Error('123123123')
+
+        // ok(p)
+        err('COMMON.PONG')
     }
 }
 

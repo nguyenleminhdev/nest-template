@@ -1,35 +1,46 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common'
 
-import type { Response } from 'express'
+import type { Request, Response } from 'express'
 
 /**hàm tuỳ chỉnh lại response của API */
-type ResponseFn = (data?: any, code?: number) => void
+export type ResFn = (data?: any, code?: number) => void
 
-/**tuỳ chỉnh ressponse */
-export interface ResType {
-  /**trả kết quả về khi thành công */
-  ok: ResponseFn
-  /**trả kết quả về khi thất bại */
-  err: ResponseFn
-}
+/**trả về kết quả thành công */
+const HANDLE_RES_OK = (
+  p: unknown, ctx: ExecutionContext
+) => (
+  data?: any, code = 200
+) => ctx
+  .switchToHttp()
+  .getResponse<Response>()
+  .status(code)
+  .json({ success: true, code, data })
 
-/**Decorator tuỳ chỉnh response */
-export const Res = createParamDecorator((
-  data: unknown,
-  ctx: ExecutionContext
-): ResType => ({
-  ok(data?: any, code = 200) {
-    ctx
-      .switchToHttp()
-      .getResponse<Response>()
-      .status(code)
-      .json({ success: true, code, data })
-  },
-  err(message: string, code = 403) {
-    ctx
-      .switchToHttp()
-      .getResponse<Response>()
-      .status(code)
-      .json({ success: false, code, message })
-  }
-}))
+/**trả về kết quả thành công */
+export const Ok = createParamDecorator(HANDLE_RES_OK)
+
+/**trả về kết quả thất bại */
+export const HANDLE_RES_ERR = (
+  p: unknown, ctx: ExecutionContext
+) => (
+  message: Error | string, code = 403
+) => ctx
+  .switchToHttp()
+  .getResponse<Response>()
+  .status(code)
+  .json({
+    success: false,
+    code,
+    message,
+    // nếu message là string thì dịch nó ra
+    mean: typeof message === 'string' ?
+      ctx
+        .switchToHttp()
+        .getRequest<Request>()
+        .i18nService
+        .t(message) :
+      undefined
+  })
+
+/**trả về kết quả thất bại */
+export const Err = createParamDecorator(HANDLE_RES_ERR)

@@ -1,6 +1,6 @@
 import { NestFactory, HttpAdapterHost } from '@nestjs/core'
-import { ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { I18nValidationPipe } from 'nestjs-i18n'
 
 import { readFileSync } from 'fs'
 
@@ -27,8 +27,10 @@ async function bootstrap() {
   // sửa lại thông báo bắt lỗi 500
   NEST.useGlobalFilters(new CatchError(NEST.get(HttpAdapterHost)))
 
-  // cài đặt validate toàn bộ request
-  NEST.useGlobalPipes(new ValidationPipe())
+  // cài đặt validate toàn bộ request chạy được với i18n
+  NEST.useGlobalPipes(new I18nValidationPipe({
+    validateCustomDecorators: true
+  }))
 
   /**lấy config tuỳ theo môi trường */
   const configService = NEST.get(ConfigService)
