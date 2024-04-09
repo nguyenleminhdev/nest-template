@@ -9,7 +9,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler'
 
 import type { I18nTranslations } from '@/langs/interface'
 
-import { IsEmail, IsNotEmpty } from 'class-validator'
+import { IsEmail, IsNotEmpty, IsNumber } from 'class-validator'
 
 /**dto validator test */
 class TestDto {
@@ -18,6 +18,9 @@ class TestDto {
 
     @IsNotEmpty()
     password: string;
+
+    @IsNumber()
+    xxx: string
 }
 
 @Injectable() export class Service {

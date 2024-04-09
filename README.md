@@ -67,20 +67,25 @@ $ pnpm run g <API-NAME>
 - i18n: https://nestjs-i18n.com
 - upload file: https://docs.nestjs.com/techniques/file-upload
 - rate limit: https://docs.nestjs.com/security/rate-limiting
-
 - req allParams và nhận dto validator
+- req err nhận i18n tự động
+- mã gốc của i18n trong res
+
+- dto validate i18n
+
+- xử lý cat lỗi dto
+- xử lý các lỗi i18n
+- xoá lỗi ERROR [I18nService] Translation "VALIDATOR.IS_EMAIL" in "vn" does not exist.
+
 - cronjob: https://docs.nestjs.com/techniques/task-scheduling
 
 ## Incomming features
-- xử lý cat lỗi dto
-- xử lý các lỗi i18n
 - queue
 - mongo, postgre
 - munti db connect
 - ghi log vào ES
 - e2e test + case cho api, core, ...
 - pm2
-- mã gốc của i18n trong res
 
 ## Stay in touch
 
